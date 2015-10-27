@@ -71,7 +71,10 @@ success_rolls = [[1 for x in row if (x[0]==1) | (x[1]==1)] for row in all_rolls]
 #For a given roll, what is the probability that the black die displays an even number 
 #and the white die displays 1?
 d2 = range(1,5)
-outcomes = range(8,0,-1)
+outcomes = [2,4,6]
 all_rolls = [[[a,b] for a in d1] for b in d2]
-success_rolls = [[1 for x in row if (x[0]==1) & (x[1]==1)] for row in all_rolls]
+success_rolls = [[1 for x in row if (x[0] in outcomes) & (x[1]==1)] for row in all_rolls]
 
+#You are given two six-sided dice to roll.
+#For a given roll, what is the probability that the dice both display 5?
+success_rolls = [[1 for x in row if (x[0]==5) & (x[1]==5)] for row in all_rolls]
