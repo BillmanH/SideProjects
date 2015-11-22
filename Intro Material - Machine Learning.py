@@ -176,3 +176,22 @@ for i in m.split(" "):
 	b = b*(ham_words[i]+k)/(sum(ham_words.values())+(k*nwords))
 
 answer = a/(a+b)
+
+'''
+linear regression - section
+'''
+x = [3,6,4,5]
+y = [0,-3,-1,-2]
+
+data = [(x[i],y[i]) for i in range(len(x))]
+
+#change in x over change in y
+slope = (data[1][0] - data[0][0]) / (data[1][1] - data[0][1])
+
+
+'''
+0 = slope*x + b
+-b+y = slope*x
+-b+0 = slope*3
+'''
+b = -1*(slope*3)

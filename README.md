@@ -7,7 +7,8 @@ From Kahn Academy - intro to probability/statistics
 ##Udacity
 ###Intro Material - Machine Learning.py
 Summary of Native Bayes:
-first machine learning
-uses bayes rule
-Laplaccia smoother
-Bag of words
+first machine learning,
+uses bayes rule,
+Laplaccia smoother,
+Bag of words,
+linear regression
