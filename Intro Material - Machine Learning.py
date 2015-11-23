@@ -5,6 +5,9 @@ uses bayes rule
 Laplaccia smoother
 Bag of words
 '''
+from collections import Counter
+from __future__ import division
+import numpy as np
 
 dictionary = ["offer",
 "is",
@@ -80,8 +83,6 @@ spam = [x.split(" ") for x in spam]
 ham = [x.split(" ") for x in ham]				
 
 #building some dictionaries:
-from collections import Counter
-from __future__ import division
 spam_words = Counter()
 
 for mail in spam:
@@ -195,3 +196,15 @@ slope = (data[1][0] - data[0][0]) / (data[1][1] - data[0][1])
 -b+0 = slope*3
 '''
 b = -1*(slope*3)
+
+x = np.array(x)
+y = np.array(y)
+
+#calculating the slope:
+w1 = ((len(x)*sum(x*y)) - (sum(x)*sum(y)))/(len(x)*(sum(x**2))-(sum(x)**2))
+w0 = (1/len(x)*sum(y)) - ((w1/len(x))*sum(x))
+
+#quiz:
+x = [2,4,6,8]
+y = [2,5,5,8]
+
