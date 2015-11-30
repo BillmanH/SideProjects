@@ -9,6 +9,8 @@ from sklearn.tree import DecisionTreeRegressor
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
 ################################
+import math
+from __future__ import division
 
 
 def load_data():
@@ -19,24 +21,35 @@ def load_data():
 
 
 def explore_city_data(city_data):
-    """Calculate the Boston housing statistics."""
+	"""Calculate the Boston housing statistics."""
 
-    # Get the labels and features from the housing data
-    housing_prices = city_data.target
-    housing_features = city_data.data
+	# Get the labels and features from the housing data
+	housing_prices = city_data.target
+	housing_features = city_data.data
 
+	# Please calculate the following values using the Numpy library
     ###################################
     ### Step 1. YOUR CODE GOES HERE ###
     ###################################
-
-    # Please calculate the following values using the Numpy library
-    # Size of data?
-    # Number of features?
-    # Minimum value?
-    # Maximum Value?
-    # Calculate mean?
-    # Calculate median?
-    # Calculate standard deviation?
+	# Size of data?
+	#this assumes that the array lengths in the dataset match.
+	#A: 506 via. That's 506 houses.
+	print ("data contains "+str(np.size(city_data.target))+" houses")
+	# Number of features?
+	#A: 13, although the documentation in city_data.DESCR 
+	# claims to have an extra LSTAT value, which was not in this data file:
+	#	MEDV     Median value of owner-occupied homes in $1000's
+	print ("each house has "+str(np.size(city_data.feature_names))+" features")
+	# Minimum value?
+	print("Minimum value: "+str(np.min(city_data.target)))
+	# Maximum Value?
+	print("Maximum value: "+str(np.max(city_data.target)))
+	# Calculate mean?
+	print("Mean value: "+str(np.mean(city_data.target)))
+	# Calculate median?
+	print("Median value: "+str(np.median(city_data.target)))
+	# Calculate standard deviation?
+	print("Standard Deviation value: "+str(np.std(city_data.target)))
 
 
 def performance_metric(label, prediction):
@@ -51,16 +64,29 @@ def performance_metric(label, prediction):
 
 
 def split_data(city_data):
-    """Randomly shuffle the sample set. Divide it into training and testing set."""
+	"""Randomly shuffle the sample set. Divide it into training and testing set."""
 
-    # Get the features and labels from the Boston housing data
-    X, y = city_data.data, city_data.target
+	# Get the features and labels from the Boston housing data
+	X, y = city_data.data, city_data.target
 
-    ###################################
-    ### Step 3. YOUR CODE GOES HERE ###
-    ###################################
+	###################################
+	### Step 3. YOUR CODE GOES HERE ###
+	###################################
+	#first, to randomly shuffle.
+	np.random.shuffle(X)
+	np.random.shuffle(y)
 
-    return X_train, y_train, X_test, y_test
+	#80% train
+	X_train = X[:int(math.floor(len(X)*(.8)))]
+	y_train = y[:int(math.floor(len(y)*(.8)))]
+	#20% test
+	X_test = X[int(math.floor(len(X)*(.8))):]
+	y_test = y[int(math.floor(len(y)*(.8))):]
+	#then to divide out into 80/20 for train and test sets.
+	#make sure that they match:
+	#len(X_train) + len(X_test) == len(X)
+	#len(y_train) + len(y_test) == len(y)
+	return X_train, y_train, X_test, y_test
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
