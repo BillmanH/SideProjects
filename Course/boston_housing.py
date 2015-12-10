@@ -11,7 +11,7 @@ from sklearn.tree import DecisionTreeRegressor
 ################################
 import math
 from __future__ import division
-
+import sklearn as sk
 
 def load_data():
     """Load the Boston dataset."""
@@ -53,14 +53,15 @@ def explore_city_data(city_data):
 
 
 def performance_metric(label, prediction):
-    """Calculate and return the appropriate performance metric."""
+	"""Calculate and return the appropriate performance metric."""
 
-    ###################################
-    ### Step 2. YOUR CODE GOES HERE ###
-    ###################################
+	###################################
+	### Step 2. YOUR CODE GOES HERE ###
+	###################################
+	# http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
+	return sk.metrics.explained_variance_score(label,prediction)
 
-    # http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
-    pass
+
 
 
 def split_data(city_data):
@@ -210,9 +211,11 @@ def main():
     city_data = load_data()
 
     # Explore the data
+	#Done!
     explore_city_data(city_data)
 
     # Training/Test dataset split
+	#Done!
     X_train, y_train, X_test, y_test = split_data(city_data)
 
     # Learning Curve Graphs
