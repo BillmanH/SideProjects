@@ -204,7 +204,7 @@ def fit_predict_model(city_data):
 
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
-    performanance of a Decision Tree regressor on the housing data.
+    performance of a Decision Tree regressor on the housing data.
     Fine tune the model to make prediction on unseen data."""
 
     # Load data
