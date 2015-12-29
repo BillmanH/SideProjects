@@ -12,6 +12,7 @@ from sklearn.tree import DecisionTreeRegressor
 import math
 from __future__ import division
 import sklearn as sk
+from sklearn.metrics import fbeta_score, make_scorer
 
 def load_data():
     """Load the Boston dataset."""
@@ -21,7 +22,8 @@ def load_data():
 
 
 def explore_city_data(city_data):
-	"""Calculate the Boston housing statistics."""
+	"""Calculate the Boston housing statistics.
+	explore_city_data(city_data)"""
 
 	# Get the labels and features from the housing data
 	housing_prices = city_data.target
@@ -112,17 +114,20 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
         test_err[i] = performance_metric(y_test, regressor.predict(X_test))
 
 
-    # Plot learning curve graph
-    learning_curve_graph(sizes, train_err, test_err)
+	# Plot learning curve graph
+	learning_curve_graph(sizes, train_err, test_err, depth)
+
+		
 
 
-def learning_curve_graph(sizes, train_err, test_err):
-    """Plot training and test error as a function of the training size."""
+def learning_curve_graph(sizes, train_err, test_err, depth):
+    """Plot training and test error as a function of the training size.
+	I have added color to the two graphs"""
 
     pl.figure()
-    pl.title('Decision Trees: Performance vs Training Size')
-    pl.plot(sizes, test_err, lw=2, label = 'test error')
-    pl.plot(sizes, train_err, lw=2, label = 'training error')
+    pl.title('Decision Trees: Performance vs Training Size at:' + str(depth))
+    pl.plot(sizes, test_err, lw=2, color="blue", label = 'test error')
+    pl.plot(sizes, train_err, lw=2, color="red", label = 'training error')
     pl.legend()
     pl.xlabel('Training Size')
     pl.ylabel('Error')
@@ -157,12 +162,13 @@ def model_complexity(X_train, y_train, X_test, y_test):
 
 
 def model_complexity_graph(max_depth, train_err, test_err):
-    """Plot training and test error as a function of the depth of the decision tree learn."""
+    """Plot training and test error as a function of the depth of the decision tree learn.
+	I have added color to the two graphs"""
 
     pl.figure()
     pl.title('Decision Trees: Performance vs Max Depth')
-    pl.plot(max_depth, test_err, lw=2, label = 'test error')
-    pl.plot(max_depth, train_err, lw=2, label = 'training error')
+    pl.plot(max_depth, test_err, lw=2, color="blue",label = 'test error')
+    pl.plot(max_depth, train_err, lw=2, color="red", label = 'training error')
     pl.legend()
     pl.xlabel('Max Depth')
     pl.ylabel('Error')
@@ -187,6 +193,7 @@ def fit_predict_model(city_data):
     # 1. Find the best performance metric
     # should be the same as your performance_metric procedure
     # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
+	scorer = make_scorer(fbeta_score, beta=2)
 
     # 2. Use gridearch to fine tune the Decision Tree Regressor and find the best model
     # http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
