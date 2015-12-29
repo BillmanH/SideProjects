@@ -12,3 +12,6 @@ uses bayes rule,
 Laplaccia smoother,
 Bag of words,
 linear regression
+
+![Alt text](https://github.com/BillmanH/Statistics/blob/master/Course/figure_1.png?raw=true "Boston Housing Prices")
+
