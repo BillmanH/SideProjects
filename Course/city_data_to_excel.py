@@ -16,3 +16,10 @@ df = pd.DataFrame(housing_features, index=housing_prices)
 df.to_csv(r"C:\Users\Bill\OneDrive\Data Files\Courses_n_samplesets\boston_housing.csv",encoding="utf-8")
 
 
+df = df.reset_index(drop=True)
+df['MDEV'] = housing_prices = city_data.target
+#LABEL YOUR DATA!
+labels = ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE','DIS','RAD','TAX','PTRATIO','B','LSTAT','MDEV']
+df.columns = labels
+
+pairwiseCorelation(df)
