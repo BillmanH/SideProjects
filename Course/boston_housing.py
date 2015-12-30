@@ -12,6 +12,7 @@ from sklearn.tree import DecisionTreeRegressor
 import math
 from __future__ import division
 import sklearn as sk
+from sklearn import grid_search
 from sklearn.metrics import fbeta_score, make_scorer
 
 def load_data():
@@ -93,31 +94,26 @@ def split_data(city_data):
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
-    """Calculate the performance of the model after a set of training data."""
+	"""Calculate the performance of the model after a set of training data."""
 
-    # We will vary the training set size so that we have 50 different sizes
-    sizes = np.linspace(1, len(X_train), 50)
-    train_err = np.zeros(len(sizes))
-    test_err = np.zeros(len(sizes))
+	# We will vary the training set size so that we have 50 different sizes
+	sizes = np.linspace(1, len(X_train), 50)
+	train_err = np.zeros(len(sizes))
+	test_err = np.zeros(len(sizes))
 
-    print "Decision Tree with Max Depth: "
-    print depth
+	print "Decision Tree with Max Depth: "
+	print depth
 
-    for i, s in enumerate(sizes):
-
-        # Create and fit the decision tree regressor model
-        regressor = DecisionTreeRegressor(max_depth=depth)
-        regressor.fit(X_train[:s], y_train[:s])
-
-        # Find the performance on the training and testing set
-        train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
-        test_err[i] = performance_metric(y_test, regressor.predict(X_test))
+	for i, s in enumerate(sizes):
+		# Create and fit the decision tree regressor model
+		regressor = DecisionTreeRegressor(max_depth=depth)
+		regressor.fit(X_train[:s], y_train[:s])
+		# Find the performance on the training and testing set
+		train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
+		test_err[i] = performance_metric(y_test, regressor.predict(X_test))
 
 
-	# Plot learning curve graph
 	learning_curve_graph(sizes, train_err, test_err, depth)
-
-		
 
 
 def learning_curve_graph(sizes, train_err, test_err, depth):
@@ -197,7 +193,7 @@ def fit_predict_model(city_data):
 	# http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
 
 	fit = regressor.fit(X, y)
-	reg = sk.grid_search.GridSearchCV(fit,parameters)
+	reg = grid_search.GridSearchCV(fit,parameters)
 	reg.fit(city_data.data, city_data.target)
 
 	# Fit the learner to the training data
@@ -209,6 +205,7 @@ def fit_predict_model(city_data):
 	y = reg.predict(x)
 	print "House: " + str(x)
 	print "Prediction: " + str(y)
+	return y
 
 
 def main():
@@ -220,11 +217,9 @@ def main():
     city_data = load_data()
 
     # Explore the data
-	#Done!
     explore_city_data(city_data)
 
     # Training/Test dataset split
-	#Done!
     X_train, y_train, X_test, y_test = split_data(city_data)
 
     # Learning Curve Graphs
