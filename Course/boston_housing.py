@@ -176,37 +176,39 @@ def model_complexity_graph(max_depth, train_err, test_err):
 
 
 def fit_predict_model(city_data):
-    """Find and tune the optimal model. Make a prediction on housing data."""
+	"""Find and tune the optimal model. Make a prediction on housing data."""
 
-    # Get the features and labels from the Boston housing data
-    X, y = city_data.data, city_data.target
+	# Get the features and labels from the Boston housing data
+	X, y = city_data.data, city_data.target
 
-    # Setup a Decision Tree Regressor
-    regressor = DecisionTreeRegressor()
+	# Setup a Decision Tree Regressor
+	regressor = DecisionTreeRegressor()
 
-    parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
+	parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
 
-    ###################################
-    ### Step 4. YOUR CODE GOES HERE ###
-    ###################################
+	###################################
+	### Step 4. YOUR CODE GOES HERE ###
+	###################################
 
-    # 1. Find the best performance metric
-    # should be the same as your performance_metric procedure
-    # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
-	scorer = make_scorer(fbeta_score, beta=2)
+	# 1. Find the best performance metric
+	# should be the same as your performance_metric procedure
+	# http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
+	# 2. Use gridearch to fine tune the Decision Tree Regressor and find the best model
+	# http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
 
-    # 2. Use gridearch to fine tune the Decision Tree Regressor and find the best model
-    # http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
+	fit = regressor.fit(X, y)
+	reg = sk.grid_search.GridSearchCV(fit,parameters)
+	reg.fit(city_data.data, city_data.target)
 
-    # Fit the learner to the training data
-    print "Final Model: "
-    print reg.fit(X, y)
-    
-    # Use the model to predict the output of a particular sample
-    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
-    y = reg.predict(x)
-    print "House: " + str(x)
-    print "Prediction: " + str(y)
+	# Fit the learner to the training data
+	print "Final Model: "
+	print reg.fit(X, y)
+
+	# Use the model to predict the output of a particular sample
+	x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+	y = reg.predict(x)
+	print "House: " + str(x)
+	print "Prediction: " + str(y)
 
 
 def main():
