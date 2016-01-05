@@ -1,3 +1,4 @@
+from __future__ import division
 """Load the Boston dataset and examine its target (label) distribution."""
 
 # Load libraries
@@ -10,7 +11,6 @@ from sklearn.tree import DecisionTreeRegressor
 ### ADD EXTRA LIBRARIES HERE ###
 ################################
 import math
-from __future__ import division
 import sklearn as sk
 from sklearn import grid_search
 from sklearn.metrics import fbeta_score, make_scorer
@@ -62,7 +62,7 @@ def performance_metric(label, prediction):
 	### Step 2. YOUR CODE GOES HERE ###
 	###################################
 	# http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
-	return sk.metrics.explained_variance_score(label,prediction)
+	return sk.metrics.mean_squared_error(label,prediction)
 
 
 
@@ -193,7 +193,9 @@ def fit_predict_model(city_data):
 	# http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
 
 	fit = regressor.fit(X, y)
-	reg = grid_search.GridSearchCV(fit,parameters)
+	myScorer = make_scorer(sk.metrics.mean_squared_error, greater_is_better=False)
+	reg = grid_search.GridSearchCV(fit,parameters,
+									scoring=myScorer)
 	reg.fit(city_data.data, city_data.target)
 
 	# Fit the learner to the training data
@@ -205,7 +207,7 @@ def fit_predict_model(city_data):
 	y = reg.predict(x)
 	print "House: " + str(x)
 	print "Prediction: " + str(y)
-	return y
+	return y[0]
 
 
 def main():
