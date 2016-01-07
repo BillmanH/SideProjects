@@ -166,6 +166,11 @@ def fit_predict_model(city_data):
 
     ###################################
     ### Step 4. YOUR CODE GOES HERE ###
+	fit = regressor.fit(X, y)
+	myScorer = make_scorer(sk.metrics.mean_squared_error, greater_is_better=False)
+	reg = grid_search.GridSearchCV(fit,parameters,
+									scoring=myScorer)
+	reg.fit(city_data.data, city_data.target)
     ###################################
 
     # 1. Find an appropriate performance metric. This should be the same as the
