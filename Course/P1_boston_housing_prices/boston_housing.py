@@ -105,9 +105,11 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
 	print depth
 
 	for i, s in enumerate(sizes):
+	
 		# Create and fit the decision tree regressor model
 		regressor = DecisionTreeRegressor(max_depth=depth)
 		regressor.fit(X_train[:s], y_train[:s])
+		
 		# Find the performance on the training and testing set
 		train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
 		test_err[i] = performance_metric(y_test, regressor.predict(X_test))
