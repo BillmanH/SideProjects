@@ -47,7 +47,7 @@ for col in df.columns:
 	
 #single commands to test output:
 X, y = city_data.data, city_data.target
-X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.3, random_state=42)
 
 fit = regressor.fit(X, y)
 myScorer = make_scorer(sk.metrics.mean_squared_error, greater_is_better=False)

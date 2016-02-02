@@ -57,7 +57,7 @@ def split_data(city_data):
 	###################################
 	### Step 2. YOUR CODE GOES HERE ###
 	#note: in production change {{random_state=42}} to {{random_state=np.random.randint(1,100)}}
-	X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.2, random_state=42)
+	X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.3, random_state=42)
 	###################################
 	return X_train, y_train, X_test, y_test
 
@@ -188,6 +188,7 @@ def fit_predict_model(city_data):
 	y = reg.predict(x)
 	print "House: " + str(x)
 	print "Prediction: " + str(y)
+	print "Best model parameter:  " + str( reg.best_params_)
 
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
