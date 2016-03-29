@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from __future__ import division
 import sklearn as sk
+from sklearn import grid_search
+from sklearn.metrics import f1_score
 
 #loading student data from local file.
 student_data = pd.read_csv(r"C:\Users\Bill\Documents\Statistics\Course\P2_Student_Intervention_System\student_intervention\student-data.csv")
@@ -59,10 +61,11 @@ num_test = num_all - num_train
 
 # TODO: Then, select features (X) and corresponding labels (y) for the training and test sets
 # Note: Shuffle the data or randomly select samples to avoid any bias due to ordering in the dataset
-X_train = X_all[:num_train]
-y_train = y_all[:num_train]
-X_test = X_all[num_train:]
-y_test = y_all[num_train:]
+# X_train = X_all[:num_train]
+# y_train = y_all[:num_train]
+# X_test = X_all[num_train:]
+# y_test = y_all[num_train:]
+X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X_all, y_all, train_size=num_train, random_state=42)
 print "Training set: {} samples".format(X_train.shape[0])
 print "Test set: {} samples".format(X_test.shape[0])
 # Note: If you need a validation set, extract it from within training data
@@ -77,16 +80,7 @@ def train_classifier(clf, X_train, y_train):
     end = time.time()
     print "Done!\nTraining time (secs): {:.3f}".format(end - start)
 
-# TODO: Choose a model, import it and instantiate an object
-from sklearn.tree import DecisionTreeClassifier
-clf = DecisionTreeClassifier(random_state=0)
-
-# Fit model to training data
-train_classifier(clf, X_train, y_train)  # note: using entire training set here
-#print clf  # you can inspect the learned model by printing it
-
-# Predict on training set and compute F1 score
-from sklearn.metrics import f1_score
+# TODO: Choose a model, impfort it and instantiate an object
 
 def predict_labels(clf, features, target):
     print "Predicting labels using {}...".format(clf.__class__.__name__)
@@ -95,13 +89,6 @@ def predict_labels(clf, features, target):
     end = time.time()
     print "Done!\nPrediction time (secs): {:.3f}".format(end - start)
     return f1_score(target.values, y_pred, pos_label='yes')
-
-train_f1_score = predict_labels(clf, X_train, y_train)
-print "F1 score for training set: {}".format(train_f1_score)
-
-# Predict on test data
-print "F1 score for test set: {}".format(predict_labels(clf, X_test, y_test))
-
 
 # Train and predict using different training set sizes
 def train_predict(clf, X_train, y_train, X_test, y_test):
@@ -114,23 +101,28 @@ def train_predict(clf, X_train, y_train, X_test, y_test):
 #I made my own function to pull out the table for the report. 
 def train_predict_many(clf, X_train, y_train, X_test, y_test,results):
 	#tweaked to return a dataframe of results for graphing.
-	start = time.time()
+	#
+	train_start = time.time()
 	train_classifier(clf, X_train, y_train)
-	end = time.time()
+	train_end = time.time()
+	#
+	predict_start = time.time()
+	prediction = predict_labels(clf, X_test, y_test)
+	predict_end = time.time()
+	#
 	index_n = len(results)
 	results.loc[index_n,"train_f1"] = predict_labels(clf, X_train, y_train)
-	results.loc[index_n,"test_f1"] = predict_labels(clf, X_test, y_test)
+	results.loc[index_n,"test_f1"] = prediction
 	results.loc[index_n,"train_size"] = len(X_train)
-	results.loc[index_n,"train_time"] = end - start
+	results.loc[index_n,"train_time"] = train_end - train_start
+	results.loc[index_n,"prediction_time"] = predict_end - predict_start
 
 
 def test_my_model(clf, X_all,y_all,training_sizes):
 	results = pd.DataFrame()
 	for size in training_sizes:
-		X_train = X_all[:size]
-		y_train = y_all[:size]
-		X_test = X_all[size:]
-		y_test = y_all[size:]
+		#removed test so that model will differ to the global X_test and y_test variables. 
+		X_train, X_test_not_used, y_train, y_test_not_used = sk.cross_validation.train_test_split(X_all, y_all, train_size=size, random_state=42)
 		train_predict_many(clf, X_train, y_train, X_test, y_test, results)		
 		results.index = results['train_size']
 	return results
@@ -162,8 +154,49 @@ KNeighbors_results = test_my_model(clf, X_all,y_all,training_sizes)
 plt.plot(KNeighbors_results['train_size'].tolist(),KNeighbors_results['test_f1'].tolist(),label='KNeighbors')
 plt.plot(RandomForest_results['train_size'].tolist(),RandomForest_results['test_f1'].tolist(),label='RandomForest')
 plt.plot(DecisionTree_results['train_size'].tolist(),DecisionTree_results['test_f1'].tolist(),label='DecisionTree')
-plt.legend()
+plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1))
 plt.xlabel('Training Size')
 plt.ylabel('F1 score')
 plt.show()
 
+from sklearn import grid_search
+from sklearn.metrics import make_scorer
+from sklearn import preprocessing
+
+X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X_all, y_all, train_size=300, random_state=42)
+
+lb = preprocessing.LabelBinarizer()
+lb.fit(y_train)
+y_bin_train = np.array([number[0] for number in lb.fit_transform(y_train)])
+
+lb_test = preprocessing.LabelBinarizer()
+lb_test.fit(y_test)
+y_test_bin = np.array([number[0] for number in lb_test.fit_transform(y_test)])
+
+myScorer = make_scorer(f1_score, greater_is_better=True)
+parameters = {'n_neighbors':range(5,50)}
+
+reg = grid_search.GridSearchCV(KNeighborsClassifier(),parameters,
+								scoring=myScorer)
+								
+
+
+reg.fit(X_train, y_bin_train)
+
+print "Best model parameter:  " + str( reg.best_params_)
+print "Best model score:  " + str( reg.best_score_)
+
+
+clf = KNeighborsClassifier(n_neighbors=34)
+KNeighbors_results_best = test_my_model(clf, X_all,y_all,training_sizes)
+
+#graphing the different models to look at which one is more reliable.
+#with the KNeighbors_results_best
+plt.plot(KNeighbors_results_best['train_size'].tolist(),KNeighbors_results_best['test_f1'].tolist(),label='KNeighbors_results_best')
+plt.plot(KNeighbors_results['train_size'].tolist(),KNeighbors_results['test_f1'].tolist(),label='KNeighbors')
+plt.plot(RandomForest_results['train_size'].tolist(),RandomForest_results['test_f1'].tolist(),label='RandomForest')
+plt.plot(DecisionTree_results['train_size'].tolist(),DecisionTree_results['test_f1'].tolist(),label='DecisionTree')
+plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1))
+plt.xlabel('Training Size')
+plt.ylabel('F1 score')
+plt.show()
