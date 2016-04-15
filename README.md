@@ -4,9 +4,6 @@ Ongoing learning on statistics and machine learning
 ##dice_roll.py:
 From Kahn Academy - intro to probability/statistics
 
-##dice_roll.py:
-From Kahn Academy - intro to probability/statistics
-
 ##Seasonally adjusted higher than normal web traffic stat testing.ipynb
 My own, an outlier identification method with an adjustment for sesonality.
 
