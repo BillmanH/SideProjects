@@ -1,5 +1,5 @@
 # Statistics
-I'm taking a bunch of statistics courses and I want to translate all of the exorcises into python. 
+Ongoing learning on statistics and machine learning 
 
 ##dice_roll.py:
 From Kahn Academy - intro to probability/statistics
