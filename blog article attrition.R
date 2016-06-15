@@ -54,8 +54,23 @@ for (title in titles) {
 
 #plot some figures to see how how they 
 hist(sorted$dayNumb, breaks = 60)  
-#not a curve at all, some articles have short lives and some have long lives with few in the middle
 plot(sorted$dayNumb,sorted$sessions)
 summary(sorted$dayNumb)
+ecdf(sorted$dayNumb)
+
+sorted$wdy <- weekdays(sorted$Date)
+barplot(sorted$dayNumb,sorted$wdy)
 
 
+#day of week published
+publishDay <- function(x){
+  article <- sorted[sorted$pageTitle==x,]
+  firstDate <- article[1,"Date"]
+  return(rep(weekdays(firstDate),nrow(article)))
+}
+
+for (title in titles) {
+  sorted[sorted$pageTitle==title,"publishDay"] <- publishDay(title)
+}
+library(ggplot2)
+ggplot(sorted, aes(x=wdy, y=dayNumb)) + geom_bar(stat="identity")
