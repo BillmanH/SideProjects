@@ -1,13 +1,3 @@
-import pandas as pd
-import numpy as np
-import time
-from scipy import stats  
-from __future__ import division
-
-col = 'date'
-testCol = 'Total Sales $'
-max_bins = 4
-alpha = .05
 
 def check_column_is_consistent_type(series):
 	'''
@@ -31,7 +21,7 @@ def split_date_to_bins(df,col,nbins):
 
 	
 #split on the col 
-def sig_crawl(df,col,colsList):
+def sig_crawl(df,col,colsList,max_bins=4):
 	'''
 	results_df = sig_crawl(df,col,colsList)
 	'''
@@ -47,14 +37,3 @@ def sig_crawl(df,col,colsList):
 				print "Significance at:  Bin=" + str(n) + " p=" + str(p_value) + " comparing="+col + " ; " + testCol
 			results_df.loc[n,testCol]=p_value
 	return results_df
-
-	
-	split = np.array_split(df, max_bins)
-#test on the testCol
-	groupings = [split[n][testCol] for n in range(len(split))]
-
-
-population_mean = df[testCol].mean()
-sample_means = [grouping[testCol].mean() for grouping in groupings]
-sample_delta = [population_mean-grouping[testCol].mean() for grouping in groupings]
-f_value, p_value = stats.f_oneway(*[split[n][testCol] for n in range(len(split))])
