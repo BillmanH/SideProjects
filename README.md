@@ -20,4 +20,4 @@ Quick stats and formulas. Some are handy from time to time.
 I did some Udacity courese a long way back.  Sometimes I copy some of the code into new projects.
 
 ## Web analytics
-Some basic stuff for looking at web data. 
+Some basic stuff for looking at web data.   
