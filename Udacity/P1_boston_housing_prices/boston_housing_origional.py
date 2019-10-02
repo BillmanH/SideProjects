@@ -23,46 +23,47 @@ def load_data():
 
 
 def explore_city_data(city_data):
-	"""Calculate the Boston housing statistics."""
+    """Calculate the Boston housing statistics."""
 
-	# Get the labels and features from the housing data
-	housing_prices = city_data.target
-	housing_features = city_data.data
+    # Get the labels and features from the housing data
+    housing_prices = city_data.target
+    housing_features = city_data.data
 
-	###################################
-	### Step 1. YOUR CODE GOES HERE ###
-	print ("data contains "+str(np.size(city_data.target))+" houses")
-	print ("each house has "+str(np.size(city_data.feature_names))+" features")
-	print("Minimum value: "+str(np.min(city_data.target)))
-	print("Maximum value: "+str(np.max(city_data.target)))
-	print("Mean value: "+str(np.mean(city_data.target)))
-	print("Median value: "+str(np.median(city_data.target)))
-	print("Standard Deviation value: "+str(np.std(city_data.target)))
-	###################################
+    ###################################
+    ### Step 1. YOUR CODE GOES HERE ###
+    print("data contains "+str(np.size(city_data.target))+" houses")
+    print("each house has "+str(np.size(city_data.feature_names))+" features")
+    print("Minimum value: "+str(np.min(city_data.target)))
+    print("Maximum value: "+str(np.max(city_data.target)))
+    print("Mean value: "+str(np.mean(city_data.target)))
+    print("Median value: "+str(np.median(city_data.target)))
+    print("Standard Deviation value: "+str(np.std(city_data.target)))
+    ###################################
 
-	# Please calculate the following values using the Numpy library
-	# Size of data (number of houses)?
-	# Number of features?
-	# Minimum price?
-	# Maximum price?
-	# Calculate mean price?
-	# Calculate median price?
-	# Calculate standard deviation?
+    # Please calculate the following values using the Numpy library
+    # Size of data (number of houses)?
+    # Number of features?
+    # Minimum price?
+    # Maximum price?
+    # Calculate mean price?
+    # Calculate median price?
+    # Calculate standard deviation?
 
 
 def split_data(city_data):
-	"""Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
+    """Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
 
-	# Get the features and labels from the Boston housing data
-	X, y = city_data.data, city_data.target
+    # Get the features and labels from the Boston housing data
+    X, y = city_data.data, city_data.target
 
-	###################################
-	### Step 2. YOUR CODE GOES HERE ###
-	#note: in production change {{random_state=42}} to {{random_state=np.random.randint(1,100)}}
-	X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.2, random_state=42)
-	###################################
+    ###################################
+    ### Step 2. YOUR CODE GOES HERE ###
+    # note: in production change {{random_state=42}} to {{random_state=np.random.randint(1,100)}}
+    X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(
+        X, y, test_size=0.2, random_state=42)
+    ###################################
 
-	return X_train, y_train, X_test, y_test
+    return X_train, y_train, X_test, y_test
 
 
 def performance_metric(label, prediction):
@@ -70,8 +71,8 @@ def performance_metric(label, prediction):
 
     ###################################
     ### Step 3. YOUR CODE GOES HERE ###
-    return sk.metrics.mean_squared_error(label,prediction)
-	###################################
+    return sk.metrics.mean_squared_error(label, prediction)
+    ###################################
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
@@ -92,9 +93,9 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
         regressor.fit(X_train[:s], y_train[:s])
 
         # Find the performance on the training and testing set
-        train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
+        train_err[i] = performance_metric(
+            y_train[:s], regressor.predict(X_train[:s]))
         test_err[i] = performance_metric(y_test, regressor.predict(X_test))
-
 
     # Plot learning curve graph
     learning_curve_graph(sizes, train_err, test_err)
@@ -105,8 +106,8 @@ def learning_curve_graph(sizes, train_err, test_err):
 
     pl.figure()
     pl.title('Decision Trees: Performance vs Training Size')
-    pl.plot(sizes, test_err, lw=2, label = 'test error')
-    pl.plot(sizes, train_err, lw=2, label = 'training error')
+    pl.plot(sizes, test_err, lw=2, label='test error')
+    pl.plot(sizes, train_err, lw=2, label='training error')
     pl.legend()
     pl.xlabel('Training Size')
     pl.ylabel('Error')
@@ -145,8 +146,8 @@ def model_complexity_graph(max_depth, train_err, test_err):
 
     pl.figure()
     pl.title('Decision Trees: Performance vs Max Depth')
-    pl.plot(max_depth, test_err, lw=2, label = 'test error')
-    pl.plot(max_depth, train_err, lw=2, label = 'training error')
+    pl.plot(max_depth, test_err, lw=2, label='test error')
+    pl.plot(max_depth, train_err, lw=2, label='training error')
     pl.legend()
     pl.xlabel('Max Depth')
     pl.ylabel('Error')
@@ -162,7 +163,7 @@ def fit_predict_model(city_data):
     # Setup a Decision Tree Regressor
     regressor = DecisionTreeRegressor()
 
-    parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
+    parameters = {'max_depth': (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)}
 
     ###################################
     ### Step 4. YOUR CODE GOES HERE ###
@@ -180,14 +181,18 @@ def fit_predict_model(city_data):
     # Fit the learner to the training data to obtain the best parameter set
     print "Final Model: "
     print reg.fit(X, y)
-    
+
     # Use the model to predict the output of a particular sample
-    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090,
+         90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
     y = reg.predict(x)
     print "House: " + str(x)
     print "Prediction: " + str(y)
 
-In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about 
+
+In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about
+
+
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
     performanance of a Decision Tree regressor on the housing data.
@@ -203,7 +208,7 @@ def main():
     X_train, y_train, X_test, y_test = split_data(city_data)
 
     # Learning Curve Graphs
-    max_depths = [1,2,3,4,5,6,7,8,9,10]
+    max_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for max_depth in max_depths:
         learning_curve(max_depth, X_train, y_train, X_test, y_test)
 

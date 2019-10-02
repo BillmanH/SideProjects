@@ -23,43 +23,44 @@ def load_data():
 
 
 def explore_city_data(city_data):
-	"""Calculate the Boston housing statistics."""
+    """Calculate the Boston housing statistics."""
 
-	# Get the labels and features from the housing data
-	housing_prices = city_data.target
-	housing_features = city_data.data
+    # Get the labels and features from the housing data
+    housing_prices = city_data.target
+    housing_features = city_data.data
 
-	###################################
-	### Step 1. YOUR CODE GOES HERE ###
-	print ("data contains "+str(np.size(city_data.target))+" houses")
-	print ("each house has "+str(np.size(city_data.feature_names))+" features")
-	print("Minimum value: "+str(np.min(city_data.target)))
-	print("Maximum value: "+str(np.max(city_data.target)))
-	print("Mean value: "+str(np.mean(city_data.target)))
-	print("Median value: "+str(np.median(city_data.target)))
-	print("Standard Deviation value: "+str(np.std(city_data.target)))
-	###################################
+    ###################################
+    ### Step 1. YOUR CODE GOES HERE ###
+    print("data contains "+str(np.size(city_data.target))+" houses")
+    print("each house has "+str(np.size(city_data.feature_names))+" features")
+    print("Minimum value: "+str(np.min(city_data.target)))
+    print("Maximum value: "+str(np.max(city_data.target)))
+    print("Mean value: "+str(np.mean(city_data.target)))
+    print("Median value: "+str(np.median(city_data.target)))
+    print("Standard Deviation value: "+str(np.std(city_data.target)))
+    ###################################
 
-	# Please calculate the following values using the Numpy library
-	# Size of data (number of houses)?
-	# Number of features?
-	# Minimum price?
-	# Maximum price?
-	# Calculate mean price?
-	# Calculate median price?
-	# Calculate standard deviation?
+    # Please calculate the following values using the Numpy library
+    # Size of data (number of houses)?
+    # Number of features?
+    # Minimum price?
+    # Maximum price?
+    # Calculate mean price?
+    # Calculate median price?
+    # Calculate standard deviation?
 
 
 def split_data(city_data):
-	"""Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
-	# Get the features and labels from the Boston housing data
-	X, y = city_data.data, city_data.target
-	###################################
-	### Step 2. YOUR CODE GOES HERE ###
-	#note: in production change {{random_state=42}} to {{random_state=np.random.randint(1,100)}}
-	X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(X, y, test_size=0.3, random_state=42)
-	###################################
-	return X_train, y_train, X_test, y_test
+    """Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
+    # Get the features and labels from the Boston housing data
+    X, y = city_data.data, city_data.target
+    ###################################
+    ### Step 2. YOUR CODE GOES HERE ###
+    # note: in production change {{random_state=42}} to {{random_state=np.random.randint(1,100)}}
+    X_train, X_test, y_train, y_test = sk.cross_validation.train_test_split(
+        X, y, test_size=0.3, random_state=42)
+    ###################################
+    return X_train, y_train, X_test, y_test
 
 
 def performance_metric(label, prediction):
@@ -67,34 +68,34 @@ def performance_metric(label, prediction):
 
     ###################################
     ### Step 3. YOUR CODE GOES HERE ###
-    return sk.metrics.mean_squared_error(label,prediction)
-	###################################
+    return sk.metrics.mean_squared_error(label, prediction)
+    ###################################
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
-	"""Calculate the performance of the model after a set of training data."""
+    """Calculate the performance of the model after a set of training data."""
 
-	# We will vary the training set size so that we have 50 different sizes
-	sizes = np.round(np.linspace(1, len(X_train), 50))
-	train_err = np.zeros(len(sizes))
-	test_err = np.zeros(len(sizes))
+    # We will vary the training set size so that we have 50 different sizes
+    sizes = np.round(np.linspace(1, len(X_train), 50))
+    train_err = np.zeros(len(sizes))
+    test_err = np.zeros(len(sizes))
 
-	print "Decision Tree with Max Depth: "
-	print depth
+    print "Decision Tree with Max Depth: "
+    print depth
 
-	for i, s in enumerate(sizes):
+    for i, s in enumerate(sizes):
 
-		# Create and fit the decision tree regressor model
-		regressor = DecisionTreeRegressor(max_depth=depth)
-		regressor.fit(X_train[:s], y_train[:s])
+        # Create and fit the decision tree regressor model
+        regressor = DecisionTreeRegressor(max_depth=depth)
+        regressor.fit(X_train[:s], y_train[:s])
 
-		# Find the performance on the training and testing set
-		train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
-		test_err[i] = performance_metric(y_test, regressor.predict(X_test))
+        # Find the performance on the training and testing set
+        train_err[i] = performance_metric(
+            y_train[:s], regressor.predict(X_train[:s]))
+        test_err[i] = performance_metric(y_test, regressor.predict(X_test))
 
-
-	# Plot learning curve graph
-	learning_curve_graph(sizes, train_err, test_err)
+    # Plot learning curve graph
+    learning_curve_graph(sizes, train_err, test_err)
 
 
 def learning_curve_graph(sizes, train_err, test_err):
@@ -102,8 +103,8 @@ def learning_curve_graph(sizes, train_err, test_err):
 
     pl.figure()
     pl.title('Decision Trees: Performance vs Training Size')
-    pl.plot(sizes, test_err, color="blue", lw=2, label = 'test error')
-    pl.plot(sizes, train_err, color="red", lw=2, label = 'training error')
+    pl.plot(sizes, test_err, color="blue", lw=2, label='test error')
+    pl.plot(sizes, train_err, color="red", lw=2, label='training error')
     pl.legend()
     pl.xlabel('Training Size')
     pl.ylabel('Error')
@@ -142,8 +143,8 @@ def model_complexity_graph(max_depth, train_err, test_err):
 
     pl.figure()
     pl.title('Decision Trees: Performance vs Max Depth')
-    pl.plot(max_depth, test_err, color="blue", lw=2, label = 'test error')
-    pl.plot(max_depth, train_err, color="red", lw=2, label = 'training error')
+    pl.plot(max_depth, test_err, color="blue", lw=2, label='test error')
+    pl.plot(max_depth, train_err, color="red", lw=2, label='training error')
     pl.legend()
     pl.xlabel('Max Depth')
     pl.ylabel('Error')
@@ -151,44 +152,47 @@ def model_complexity_graph(max_depth, train_err, test_err):
 
 
 def fit_predict_model(city_data):
-	"""Find and tune the optimal model. Make a prediction on housing data."""
+    """Find and tune the optimal model. Make a prediction on housing data."""
 
-	# Get the features and labels from the Boston housing data
-	X, y = city_data.data, city_data.target
+    # Get the features and labels from the Boston housing data
+    X, y = city_data.data, city_data.target
 
-	# Setup a Decision Tree Regressor
-	regressor = DecisionTreeRegressor()
+    # Setup a Decision Tree Regressor
+    regressor = DecisionTreeRegressor()
 
-	parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
+    parameters = {'max_depth': (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)}
 
-	###################################
-	### Step 4. YOUR CODE GOES HERE ###
-	fit = regressor.fit(X, y)
-	myScorer = make_scorer(sk.metrics.mean_squared_error, greater_is_better=False)
-	reg = grid_search.GridSearchCV(fit,parameters,
-									scoring=myScorer)
-	reg.fit(city_data.data, city_data.target)
-	###################################
+    ###################################
+    ### Step 4. YOUR CODE GOES HERE ###
+    fit = regressor.fit(X, y)
+    myScorer = make_scorer(sk.metrics.mean_squared_error,
+                           greater_is_better=False)
+    reg = grid_search.GridSearchCV(fit, parameters,
+                                   scoring=myScorer)
+    reg.fit(city_data.data, city_data.target)
+    ###################################
 
-	# 1. Find an appropriate performance metric. This should be the same as the
-	# one used in your performance_metric procedure above:
-	# http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
+    # 1. Find an appropriate performance metric. This should be the same as the
+    # one used in your performance_metric procedure above:
+    # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
 
-	# 2. We will use grid search to fine tune the Decision Tree Regressor and
-	# obtain the parameters that generate the best training performance. Set up
-	# the grid search object here.
-	# http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
+    # 2. We will use grid search to fine tune the Decision Tree Regressor and
+    # obtain the parameters that generate the best training performance. Set up
+    # the grid search object here.
+    # http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
 
-	# Fit the learner to the training data to obtain the best parameter set
-	print "Final Model: "
-	print reg.fit(X, y)
+    # Fit the learner to the training data to obtain the best parameter set
+    print "Final Model: "
+    print reg.fit(X, y)
 
-	# Use the model to predict the output of a particular sample
-	x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
-	y = reg.predict(x)
-	print "House: " + str(x)
-	print "Prediction: " + str(y)
-	print "Best model parameter:  " + str( reg.best_params_)
+    # Use the model to predict the output of a particular sample
+    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090,
+         90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    y = reg.predict(x)
+    print "House: " + str(x)
+    print "Prediction: " + str(y)
+    print "Best model parameter:  " + str(reg.best_params_)
+
 
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
@@ -205,7 +209,7 @@ def main():
     X_train, y_train, X_test, y_test = split_data(city_data)
 
     # Learning Curve Graphs
-    max_depths = [1,2,3,4,5,6,7,8,9,10]
+    max_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for max_depth in max_depths:
         learning_curve(max_depth, X_train, y_train, X_test, y_test)
 

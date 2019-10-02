@@ -1,3 +1,7 @@
+#python specific
+#*.pyc
+
+#project specific
 Course/boston_housing.pyc
 Course/~$estions and Report Structure.docx
 Course/Questions and Report Structure.docx
@@ -9,3 +13,6 @@ Course/P1 Boston Housing Prices William Harding.zip
 Course/P1- Boston Housing Prices William Harding.pdf
 Course/P1_boston_housing_prices/boston_housing_2.pyc
 Stat Testing/Phacker.pyc
+
+#vs stuff
+.vscode/settings.json
