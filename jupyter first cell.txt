@@ -1,0 +1,17 @@
+## Usually the first cell of a notebook is the same.
+## Especially if I'm just playing around. 
+
+#standard Libaries
+import pandas as pd
+import numpy as np
+import altair as alt
+
+import os
+import getpass
+
+print(getpass.getuser())
+
+#personal settings
+pd.set_option("display.max_columns", 10)
+pd.set_option("display.max_rows", 10)
+%load_ext lab_black
